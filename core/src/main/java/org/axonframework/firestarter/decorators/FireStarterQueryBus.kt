@@ -21,6 +21,7 @@ import org.axonframework.messaging.MessageDispatchInterceptor
 import org.axonframework.messaging.MessageHandler
 import org.axonframework.messaging.MessageHandlerInterceptor
 import org.axonframework.queryhandling.*
+import org.reactivestreams.Publisher
 import java.lang.reflect.Type
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
@@ -78,5 +79,9 @@ class FireStarterQueryBus(private val delegate: QueryBus) : QueryBus {
 
     override fun queryUpdateEmitter(): QueryUpdateEmitter? {
         return delegate.queryUpdateEmitter()
+    }
+
+    override fun <Q : Any?, R : Any?> streamingQuery(query: StreamingQueryMessage<Q, R>?): Publisher<QueryResponseMessage<R>>? {
+        return delegate.streamingQuery(query)
     }
 }
