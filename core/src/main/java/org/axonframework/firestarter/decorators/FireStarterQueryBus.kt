@@ -27,11 +27,11 @@ import java.util.concurrent.TimeUnit
 import java.util.stream.Stream
 
 class FireStarterQueryBus(private val delegate: QueryBus) : QueryBus {
-    override fun registerHandlerInterceptor(handlerInterceptor: MessageHandlerInterceptor<in QueryMessage<*, *>>): Registration {
+    override fun registerHandlerInterceptor(handlerInterceptor: MessageHandlerInterceptor<in QueryMessage<*, *>>): Registration? {
         return delegate.registerHandlerInterceptor(handlerInterceptor)
     }
 
-    override fun registerDispatchInterceptor(dispatchInterceptor: MessageDispatchInterceptor<in QueryMessage<*, *>>): Registration {
+    override fun registerDispatchInterceptor(dispatchInterceptor: MessageDispatchInterceptor<in QueryMessage<*, *>>): Registration? {
         return delegate.registerDispatchInterceptor(dispatchInterceptor)
     }
 
@@ -39,7 +39,7 @@ class FireStarterQueryBus(private val delegate: QueryBus) : QueryBus {
         queryName: String,
         responseType: Type,
         handler: MessageHandler<in QueryMessage<*, R>>
-    ): Registration {
+    ): Registration? {
         return delegate.subscribe(queryName, responseType, handler)
     }
 
@@ -52,12 +52,12 @@ class FireStarterQueryBus(private val delegate: QueryBus) : QueryBus {
         query: QueryMessage<Q, R>,
         timeout: Long,
         unit: TimeUnit
-    ): Stream<QueryResponseMessage<R>> {
+    ): Stream<QueryResponseMessage<R>>? {
         FireStarterSettingsHolder.getSettings().query?.dispatch?.applyTaints()
         return delegate.scatterGather(query, timeout, unit)
     }
 
-    override fun <Q : Any?, I : Any?, U : Any?> subscriptionQuery(query: SubscriptionQueryMessage<Q, I, U>): SubscriptionQueryResult<QueryResponseMessage<I>, SubscriptionQueryUpdateMessage<U>> {
+    override fun <Q : Any?, I : Any?, U : Any?> subscriptionQuery(query: SubscriptionQueryMessage<Q, I, U>): SubscriptionQueryResult<QueryResponseMessage<I>, SubscriptionQueryUpdateMessage<U>>? {
         return delegate.subscriptionQuery(query)
     }
 
@@ -65,18 +65,18 @@ class FireStarterQueryBus(private val delegate: QueryBus) : QueryBus {
         query: SubscriptionQueryMessage<Q, I, U>,
         backpressure: SubscriptionQueryBackpressure?,
         updateBufferSize: Int
-    ): SubscriptionQueryResult<QueryResponseMessage<I>, SubscriptionQueryUpdateMessage<U>> {
+    ): SubscriptionQueryResult<QueryResponseMessage<I>, SubscriptionQueryUpdateMessage<U>>? {
         return delegate.subscriptionQuery(query, backpressure, updateBufferSize)
     }
 
     override fun <Q : Any?, I : Any?, U : Any?> subscriptionQuery(
         query: SubscriptionQueryMessage<Q, I, U>,
         updateBufferSize: Int
-    ): SubscriptionQueryResult<QueryResponseMessage<I>, SubscriptionQueryUpdateMessage<U>> {
+    ): SubscriptionQueryResult<QueryResponseMessage<I>, SubscriptionQueryUpdateMessage<U>>? {
         return delegate.subscriptionQuery(query, updateBufferSize)
     }
 
-    override fun queryUpdateEmitter(): QueryUpdateEmitter {
+    override fun queryUpdateEmitter(): QueryUpdateEmitter? {
         return delegate.queryUpdateEmitter()
     }
 }

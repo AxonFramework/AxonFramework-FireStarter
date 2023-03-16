@@ -33,11 +33,11 @@ import java.util.function.Consumer
 
 class FireStarterEventStore(private val delegate: EventStore) : EventStore {
 
-    override fun subscribe(messageProcessor: Consumer<MutableList<out EventMessage<*>>>): Registration {
+    override fun subscribe(messageProcessor: Consumer<MutableList<out EventMessage<*>>>): Registration? {
         return delegate.subscribe(messageProcessor)
     }
 
-    override fun registerDispatchInterceptor(dispatchInterceptor: MessageDispatchInterceptor<in EventMessage<*>>): Registration {
+    override fun registerDispatchInterceptor(dispatchInterceptor: MessageDispatchInterceptor<in EventMessage<*>>): Registration? {
         return delegate.registerDispatchInterceptor(dispatchInterceptor)
     }
 
@@ -53,12 +53,12 @@ class FireStarterEventStore(private val delegate: EventStore) : EventStore {
         return delegate.publish(events)
     }
 
-    override fun openStream(trackingToken: TrackingToken?): BlockingStream<TrackedEventMessage<*>> {
+    override fun openStream(trackingToken: TrackingToken?): BlockingStream<TrackedEventMessage<*>>? {
         FireStarterSettingsHolder.getSettings().events?.openStream?.applyTaints()
         return delegate.openStream(trackingToken)
     }
 
-    override fun readEvents(aggregateIdentifier: String): DomainEventStream {
+    override fun readEvents(aggregateIdentifier: String): DomainEventStream? {
         FireStarterSettingsHolder.getSettings().events?.readAggregateStream?.applyTaints()
         return delegate.readEvents(aggregateIdentifier)
     }
@@ -68,19 +68,19 @@ class FireStarterEventStore(private val delegate: EventStore) : EventStore {
         return delegate.storeSnapshot(snapshot)
     }
 
-    override fun createTailToken(): TrackingToken {
+    override fun createTailToken(): TrackingToken? {
         return delegate.createTailToken()
     }
 
-    override fun createHeadToken(): TrackingToken {
+    override fun createHeadToken(): TrackingToken? {
         return delegate.createHeadToken()
     }
 
-    override fun createTokenAt(dateTime: Instant): TrackingToken {
+    override fun createTokenAt(dateTime: Instant): TrackingToken? {
         return delegate.createTokenAt(dateTime)
     }
 
-    override fun createTokenSince(duration: Duration?): TrackingToken {
+    override fun createTokenSince(duration: Duration?): TrackingToken? {
         return delegate.createTokenAt(Instant.now() - duration)
     }
 }

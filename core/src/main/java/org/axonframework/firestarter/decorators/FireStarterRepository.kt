@@ -17,25 +17,25 @@ class FireStarterRepository<T>(private val delegate: Repository<T>) : Repository
         return delegate.canResolve(scopeDescription)
     }
 
-    override fun load(p0: String): Aggregate<T> {
+    override fun load(p0: String): Aggregate<T>? {
         FireStarterSettingsHolder.getSettings().command?.repositoryLoad?.applyTaints()
         return delegate.load(p0)
     }
 
-    override fun load(p0: String, p1: Long?): Aggregate<T> {
+    override fun load(p0: String, p1: Long?): Aggregate<T>? {
         FireStarterSettingsHolder.getSettings().command?.repositoryLoad?.applyTaints()
         return delegate.load(p0, p1)
     }
 
-    override fun newInstance(p0: Callable<T>): Aggregate<T> {
+    override fun newInstance(p0: Callable<T>): Aggregate<T>? {
         return delegate.newInstance(p0)
     }
 
-    override fun loadOrCreate(aggregateIdentifier: String, factoryMethod: Callable<T>): Aggregate<T> {
+    override fun loadOrCreate(aggregateIdentifier: String, factoryMethod: Callable<T>): Aggregate<T>? {
         return delegate.loadOrCreate(aggregateIdentifier, factoryMethod)
     }
 
-    override fun newInstance(factoryMethod: Callable<T>?, initMethod: Consumer<Aggregate<T>>?): Aggregate<T> {
+    override fun newInstance(factoryMethod: Callable<T>?, initMethod: Consumer<Aggregate<T>>?): Aggregate<T>? {
         return delegate.newInstance(factoryMethod, initMethod)
     }
 }
