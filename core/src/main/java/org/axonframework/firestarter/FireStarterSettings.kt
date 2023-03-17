@@ -88,4 +88,4 @@ data class RandomDelay(val lowerBound: Long, val higherBound: Long) {
 }
 
 class AxonFireStarterRuntimeException : RuntimeException("Axon Fire Starter Runtime Exception!")
-class AxonFireStarterCheckedException : RuntimeException("Axon Fire Starter Checked Exception!")
+class AxonFireStarterCheckedException : Exception("Axon Fire Starter Checked Exception!")
