@@ -21,6 +21,7 @@ data class FireStarterSettings(
     val command: CommandSettings? = CommandSettings(),
     val query: QuerySettings? = QuerySettings(),
     val sagas: SagaSettings? = SagaSettings(),
+    val tokens: TokenSettings? = TokenSettings(),
 )
 
 data class EventStoreSettings(
@@ -48,6 +49,11 @@ data class QuerySettings(
 data class SagaSettings(
     val load: Taints = Taints(),
     val associationLookup: Taints = Taints(),
+)
+
+data class TokenSettings(
+    val fetch: Taints = Taints(),
+    val store: Taints = Taints(),
 )
 
 data class Taints(

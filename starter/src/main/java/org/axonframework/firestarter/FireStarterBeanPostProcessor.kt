@@ -18,6 +18,7 @@ package org.axonframework.firestarter
 
 import org.axonframework.commandhandling.CommandBus
 import org.axonframework.common.lock.LockFactory
+import org.axonframework.eventhandling.tokenstore.TokenStore
 import org.axonframework.eventsourcing.eventstore.EventStore
 import org.axonframework.firestarter.decorators.*
 import org.axonframework.modelling.command.Repository
@@ -51,6 +52,10 @@ class FireStarterBeanPostProcessor : BeanPostProcessor {
         if (bean is SagaRepository<*>) {
             logger.info("Decorating SagaRepository with Axon Framework Firestarter")
             return FireStarterSagaRepository(bean)
+        }
+        if (bean is TokenStore) {
+            logger.info("Decorating TokenStore with Axon Framework Firestarter")
+            return FireStarterTokenStore(bean)
         }
         if (bean is Repository<*>) {
             logger.info("Decorating Repository with Axon Framework Firestarter")
