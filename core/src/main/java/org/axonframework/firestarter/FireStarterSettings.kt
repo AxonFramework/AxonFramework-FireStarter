@@ -46,8 +46,10 @@ data class QuerySettings(
 
 
 data class SagaSettings(
-    val load: Taints = Taints(),
-    val associationLookup: Taints = Taints(),
+    val create: Taints = Taints(),
+    val update: Taints = Taints(),
+    val delete: Taints = Taints(),
+    val retrieve: Taints = Taints(),
 )
 
 data class Taints(
