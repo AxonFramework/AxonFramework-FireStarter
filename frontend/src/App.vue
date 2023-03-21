@@ -6,7 +6,7 @@ import TaintChooser from "@/components/TaintChooser.vue";
 const loading = ref<boolean>(false)
 const settings = ref<any>(null)
 const getSettings = async () => {
-  const r = await fetch('/fire-starter/settings', {method: 'GET'})
+  const r = await fetch(window.location.pathname + 'settings', {method: 'GET'})
   if (r.ok) {
     settings.value = await r.json()
   } else {
@@ -17,7 +17,7 @@ const getSettings = async () => {
 getSettings()
 
 const save = async () => {
-  const r = await fetch('/fire-starter/settings', {
+  const r = await fetch(window.location.pathname + 'settings', {
     method: 'POST',
     body: JSON.stringify(settings.value),
     headers: {'Content-Type': 'application/json'}

@@ -48,7 +48,7 @@ class FireStarterTokenStore(private val delegate: TokenStore) : TokenStore {
         delegate.storeToken(token, processorName, segment)
     }
 
-    override fun fetchToken(processorName: String, segement: Int): TrackingToken {
+    override fun fetchToken(processorName: String, segement: Int): TrackingToken? {
         FireStarterSettingsHolder.getSettings().tokens?.fetch?.applyTaints()
         return delegate.fetchToken(processorName, segement)
     }
@@ -87,7 +87,7 @@ class FireStarterTokenStore(private val delegate: TokenStore) : TokenStore {
         return delegate.requiresExplicitSegmentInitialization()
     }
 
-    override fun fetchSegments(processorName: String): IntArray {
+    override fun fetchSegments(processorName: String): IntArray? {
         FireStarterSettingsHolder.getSettings().tokens?.fetch?.applyTaints()
         return delegate.fetchSegments(processorName)
     }
