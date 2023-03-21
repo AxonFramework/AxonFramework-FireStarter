@@ -121,12 +121,20 @@ const save = async () => {
 
             <h2 class="text-secondary">Sagas</h2>
 
-            <TaintChooser name="Saga Load" :taints="settings.sagas.load" @update="(update) => {
-              settings.sagas.load = update
+            <TaintChooser name="Saga Create" :taints="settings.sagas.create" @update="(update) => {
+              settings.sagas.create = update
               save()
             }"/>
-            <TaintChooser name="Saga Association Lookup" :taints="settings.sagas.associationLookup" @update="(update) => {
-              settings.sagas.associationLookup = update
+            <TaintChooser name="Saga Update" :taints="settings.sagas.update" @update="(update) => {
+              settings.sagas.update = update
+              save()
+            }"/>
+            <TaintChooser name="Saga Delete" :taints="settings.sagas.delete" @update="(update) => {
+              settings.sagas.delete = update
+              save()
+            }"/>
+            <TaintChooser name="Saga Retrieve" :taints="settings.sagas.retrieve" @update="(update) => {
+              settings.sagas.retrieve = update
               save()
             }"/>
           </div>

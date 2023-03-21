@@ -21,7 +21,7 @@ import org.axonframework.common.lock.LockFactory
 import org.axonframework.eventsourcing.eventstore.EventStore
 import org.axonframework.firestarter.decorators.*
 import org.axonframework.modelling.command.Repository
-import org.axonframework.modelling.saga.SagaRepository
+import org.axonframework.modelling.saga.repository.SagaStore
 import org.axonframework.queryhandling.QueryBus
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.BeanPostProcessor
@@ -48,9 +48,9 @@ class FireStarterBeanPostProcessor : BeanPostProcessor {
             logger.info("Decorating LockFactory with Axon Framework Firestarter")
             return FireStarterLockFactory(bean)
         }
-        if (bean is SagaRepository<*>) {
+        if (bean is SagaStore<*>) {
             logger.info("Decorating SagaRepository with Axon Framework Firestarter")
-            return FireStarterSagaRepository(bean)
+            return FireStarterSagaStore(bean)
         }
         if (bean is Repository<*>) {
             logger.info("Decorating Repository with Axon Framework Firestarter")
