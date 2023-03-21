@@ -21,6 +21,7 @@ data class FireStarterSettings(
     val command: CommandSettings? = CommandSettings(),
     val query: QuerySettings? = QuerySettings(),
     val sagas: SagaSettings? = SagaSettings(),
+    val tokens: TokenSettings? = TokenSettings(),
 )
 
 data class EventStoreSettings(
@@ -50,6 +51,11 @@ data class SagaSettings(
     val update: Taints = Taints(),
     val delete: Taints = Taints(),
     val retrieve: Taints = Taints(),
+)
+
+data class TokenSettings(
+    val fetch: Taints = Taints(),
+    val store: Taints = Taints(),
 )
 
 data class Taints(
@@ -90,4 +96,4 @@ data class RandomDelay(val lowerBound: Long, val higherBound: Long) {
 }
 
 class AxonFireStarterRuntimeException : RuntimeException("Axon Fire Starter Runtime Exception!")
-class AxonFireStarterCheckedException : RuntimeException("Axon Fire Starter Checked Exception!")
+class AxonFireStarterCheckedException : Exception("Axon Fire Starter Checked Exception!")

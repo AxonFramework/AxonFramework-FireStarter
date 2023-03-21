@@ -138,6 +138,19 @@ const save = async () => {
               save()
             }"/>
           </div>
+          <div class="col-md-4 mt-4">
+
+            <h2 class="text-secondary">Token Store</h2>
+
+            <TaintChooser name="Store Token" :taints="settings.tokens.store" @update="(update) => {
+              settings.tokens.store = update
+              save()
+            }"/>
+            <TaintChooser name="Fetch Token" :taints="settings.tokens.fetch" @update="(update) => {
+              settings.tokens.fetch = update
+              save()
+            }"/>
+          </div>
         </div>
       </div>
     </div>
