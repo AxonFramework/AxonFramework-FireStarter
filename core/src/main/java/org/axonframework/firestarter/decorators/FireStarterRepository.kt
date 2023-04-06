@@ -5,10 +5,12 @@ import org.axonframework.messaging.Message
 import org.axonframework.messaging.ScopeDescriptor
 import org.axonframework.modelling.command.Aggregate
 import org.axonframework.modelling.command.Repository
+import org.axonframework.tracing.SpanFactory
 import java.util.concurrent.Callable
 import java.util.function.Consumer
 
-class FireStarterRepository<T>(private val delegate: Repository<T>) : Repository<T> {
+class FireStarterRepository<T>(private val delegate: Repository<T>, private val spanFactory: SpanFactory) :
+    Repository<T> {
     override fun send(message: Message<*>?, scopeDescription: ScopeDescriptor?) {
         return delegate.send(message, scopeDescription)
     }
@@ -18,13 +20,19 @@ class FireStarterRepository<T>(private val delegate: Repository<T>) : Repository
     }
 
     override fun load(p0: String): Aggregate<T>? {
-        FireStarterSettingsHolder.getSettings().command?.repositoryLoad?.applyTaints()
-        return delegate.load(p0)
+        return spanFactory.createInternalSpan { "FireStarterRepository.load" }
+            .runSupplier {
+                FireStarterSettingsHolder.getSettings().command?.repositoryLoad?.applyTaints()
+                delegate.load(p0)
+            }
     }
 
     override fun load(p0: String, p1: Long?): Aggregate<T>? {
-        FireStarterSettingsHolder.getSettings().command?.repositoryLoad?.applyTaints()
-        return delegate.load(p0, p1)
+        return spanFactory.createInternalSpan { "FireStarterRepository.load" }
+            .runSupplier {
+                FireStarterSettingsHolder.getSettings().command?.repositoryLoad?.applyTaints()
+                delegate.load(p0, p1)
+            }
     }
 
     override fun newInstance(p0: Callable<T>): Aggregate<T>? {

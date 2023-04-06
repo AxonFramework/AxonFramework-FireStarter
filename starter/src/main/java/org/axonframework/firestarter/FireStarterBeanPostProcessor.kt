@@ -17,17 +17,16 @@
 package org.axonframework.firestarter
 
 import org.axonframework.commandhandling.CommandBus
-import org.axonframework.common.lock.LockFactory
 import org.axonframework.eventhandling.tokenstore.TokenStore
 import org.axonframework.eventsourcing.eventstore.EventStore
 import org.axonframework.firestarter.decorators.*
-import org.axonframework.modelling.command.Repository
 import org.axonframework.modelling.saga.repository.SagaStore
 import org.axonframework.queryhandling.QueryBus
+import org.axonframework.tracing.SpanFactory
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.BeanPostProcessor
 
-class FireStarterBeanPostProcessor : BeanPostProcessor {
+class FireStarterBeanPostProcessor(private val spanFactory: SpanFactory) : BeanPostProcessor {
     private val logger = LoggerFactory.getLogger(
         this::class.java
     )
@@ -35,7 +34,7 @@ class FireStarterBeanPostProcessor : BeanPostProcessor {
     override fun postProcessBeforeInitialization(bean: Any, beanName: String): Any? {
         if (bean is EventStore) {
             logger.info("Decorating EventStore with Axon Framework Firestarter")
-            return FireStarterEventStore(bean)
+            return FireStarterEventStore(bean, spanFactory)
         }
         if (bean is QueryBus) {
             logger.info("Decorating QueryBus with Axon Framework Firestarter")
@@ -43,11 +42,7 @@ class FireStarterBeanPostProcessor : BeanPostProcessor {
         }
         if (bean is CommandBus) {
             logger.info("Decorating CommandBus with Axon Framework Firestarter")
-            return FireStarterCommandBus(bean)
-        }
-        if (bean is LockFactory) {
-            logger.info("Decorating LockFactory with Axon Framework Firestarter")
-            return FireStarterLockFactory(bean)
+            return FireStarterCommandBus(bean, spanFactory)
         }
         if (bean is SagaStore<*>) {
             logger.info("Decorating SagaRepository with Axon Framework Firestarter")
@@ -57,11 +52,6 @@ class FireStarterBeanPostProcessor : BeanPostProcessor {
             logger.info("Decorating TokenStore with Axon Framework Firestarter")
             return FireStarterTokenStore(bean)
         }
-        if (bean is Repository<*>) {
-            logger.info("Decorating Repository with Axon Framework Firestarter")
-            return FireStarterRepository(bean)
-        }
-
         return super.postProcessBeforeInitialization(bean, beanName)
     }
 }
