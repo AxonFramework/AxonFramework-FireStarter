@@ -8,8 +8,9 @@ import org.axonframework.firestarter.FireStarterSettingsHolder
 import org.axonframework.messaging.MessageDispatchInterceptor
 import org.axonframework.messaging.MessageHandler
 import org.axonframework.messaging.MessageHandlerInterceptor
+import org.axonframework.tracing.SpanFactory
 
-class FireStarterCommandBus(private val delegate: CommandBus) : CommandBus {
+class FireStarterCommandBus(private val delegate: CommandBus, private val spanFactory: SpanFactory) : CommandBus {
     override fun registerHandlerInterceptor(handlerInterceptor: MessageHandlerInterceptor<in CommandMessage<*>>): Registration? {
         return delegate.registerHandlerInterceptor(handlerInterceptor)
     }
@@ -23,8 +24,10 @@ class FireStarterCommandBus(private val delegate: CommandBus) : CommandBus {
     }
 
     override fun <C : Any?, R : Any?> dispatch(command: CommandMessage<C>, callback: CommandCallback<in C, in R>) {
-        FireStarterSettingsHolder.getSettings().command?.dispatch?.applyTaints()
-        return delegate.dispatch(command, callback)
+        return spanFactory.createInternalSpan { "FireStarterCommandBus.dispatch" }.runSupplier {
+            FireStarterSettingsHolder.getSettings().command?.dispatch?.applyTaints()
+            delegate.dispatch(command, callback)
+        }
     }
 
     override fun subscribe(commandName: String, handler: MessageHandler<in CommandMessage<*>>): Registration? {

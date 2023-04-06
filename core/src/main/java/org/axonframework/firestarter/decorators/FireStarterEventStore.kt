@@ -27,11 +27,12 @@ import org.axonframework.eventsourcing.eventstore.EventStore
 import org.axonframework.firestarter.FireStarterSettingsHolder
 import org.axonframework.messaging.MessageDispatchInterceptor
 import org.axonframework.messaging.unitofwork.CurrentUnitOfWork
+import org.axonframework.tracing.SpanFactory
 import java.time.Duration
 import java.time.Instant
 import java.util.function.Consumer
 
-class FireStarterEventStore(private val delegate: EventStore) : EventStore {
+class FireStarterEventStore(private val delegate: EventStore, private val spanFactory: SpanFactory) : EventStore {
 
     override fun subscribe(messageProcessor: Consumer<MutableList<out EventMessage<*>>>): Registration? {
         return delegate.subscribe(messageProcessor)
@@ -42,30 +43,38 @@ class FireStarterEventStore(private val delegate: EventStore) : EventStore {
     }
 
     override fun publish(events: MutableList<out EventMessage<*>>) {
-        FireStarterSettingsHolder.getSettings().events?.publishEvent?.applyTaints()
-        CurrentUnitOfWork.map { uow ->
-            uow.resources().computeIfAbsent("__firestarter_commit_taint") {
-                uow.onCommit {
-                    FireStarterSettingsHolder.getSettings().events?.commitEvents?.applyTaints()
+        return spanFactory.createInternalSpan { "FireStarterEventStore.publish" }.runSupplier {
+            FireStarterSettingsHolder.getSettings().events?.publishEvent?.applyTaints()
+            CurrentUnitOfWork.map { uow ->
+                uow.resources().computeIfAbsent("__firestarter_commit_taint") {
+                    uow.onCommit {
+                        FireStarterSettingsHolder.getSettings().events?.commitEvents?.applyTaints()
+                    }
                 }
             }
+            delegate.publish(events)
         }
-        return delegate.publish(events)
     }
 
     override fun openStream(trackingToken: TrackingToken?): BlockingStream<TrackedEventMessage<*>>? {
-        FireStarterSettingsHolder.getSettings().events?.openStream?.applyTaints()
-        return delegate.openStream(trackingToken)
+        return spanFactory.createInternalSpan { "FireStarterEventStore.openStream" }.runSupplier {
+            FireStarterSettingsHolder.getSettings().events?.openStream?.applyTaints()
+            delegate.openStream(trackingToken)
+        }
     }
 
     override fun readEvents(aggregateIdentifier: String): DomainEventStream? {
-        FireStarterSettingsHolder.getSettings().events?.readAggregateStream?.applyTaints()
-        return delegate.readEvents(aggregateIdentifier)
+        return spanFactory.createInternalSpan { "FireStarterEventStore.readEvents" }.runSupplier {
+            FireStarterSettingsHolder.getSettings().events?.readAggregateStream?.applyTaints()
+            delegate.readEvents(aggregateIdentifier)
+        }
     }
 
     override fun storeSnapshot(snapshot: DomainEventMessage<*>) {
-        FireStarterSettingsHolder.getSettings().events?.storeSnapshot?.applyTaints()
-        return delegate.storeSnapshot(snapshot)
+        return spanFactory.createInternalSpan { "FireStarterEventStore.storeSnapshot" }.runSupplier {
+            FireStarterSettingsHolder.getSettings().events?.storeSnapshot?.applyTaints()
+            delegate.storeSnapshot(snapshot)
+        }
     }
 
     override fun createTailToken(): TrackingToken? {
