@@ -26,7 +26,7 @@ import org.axonframework.tracing.SpanFactory
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.BeanPostProcessor
 
-class FireStarterBeanPostProcessor(private val spanFactory: SpanFactory) : BeanPostProcessor {
+class FireStarterBeanPostProcessor: BeanPostProcessor {
     private val logger = LoggerFactory.getLogger(
         this::class.java
     )
@@ -34,7 +34,7 @@ class FireStarterBeanPostProcessor(private val spanFactory: SpanFactory) : BeanP
     override fun postProcessBeforeInitialization(bean: Any, beanName: String): Any? {
         if (bean is EventStore) {
             logger.info("Decorating EventStore with Axon Framework Firestarter")
-            return FireStarterEventStore(bean, spanFactory)
+            return FireStarterEventStore(bean)
         }
         if (bean is QueryBus) {
             logger.info("Decorating QueryBus with Axon Framework Firestarter")
@@ -42,7 +42,7 @@ class FireStarterBeanPostProcessor(private val spanFactory: SpanFactory) : BeanP
         }
         if (bean is CommandBus) {
             logger.info("Decorating CommandBus with Axon Framework Firestarter")
-            return FireStarterCommandBus(bean, spanFactory)
+            return FireStarterCommandBus(bean)
         }
         if (bean is SagaStore<*>) {
             logger.info("Decorating SagaRepository with Axon Framework Firestarter")
