@@ -23,11 +23,11 @@
     <parent>
         <groupId>org.axonframework.firestarter</groupId>
         <artifactId>firestarter-parent</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>firestarter-spring-starter</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>Axon Framework FireStarter Spring Starter</name>
     <description>Spring Boot starter for AxonFramework FireStarter</description>
 
