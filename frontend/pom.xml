@@ -5,10 +5,10 @@
     <parent>
         <groupId>org.axonframework.firestarter</groupId>
         <artifactId>firestarter-parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
     </parent>
     <artifactId>firestarter-frontend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>Frontend</name>
 
     <properties>
