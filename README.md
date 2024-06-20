@@ -9,7 +9,7 @@ Simply add the starter and you can visit `/fire-starter/` on your application an
 <dependency>
     <groupId>org.axonframework.firestarter</groupId>
     <artifactId>firestarter-spring-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 
