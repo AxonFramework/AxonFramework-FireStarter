@@ -17,6 +17,7 @@
 package org.axonframework.firestarter
 
 data class FireStarterSettings(
+    val applicationName: String?,
     val events: EventStoreSettings? = EventStoreSettings(),
     val command: CommandSettings? = CommandSettings(),
     val query: QuerySettings? = QuerySettings(),

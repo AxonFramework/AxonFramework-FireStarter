@@ -18,7 +18,8 @@ package org.axonframework.firestarter
 
 class FireStarterSettingsHolder {
     companion object {
-        private var settings: FireStarterSettings = FireStarterSettings()
+        private var settings: FireStarterSettings =
+            FireStarterSettings(applicationName = System.getProperty("LOGGED_APPLICATION_NAME"))
 
         @JvmStatic
         fun getSettings(): FireStarterSettings {
