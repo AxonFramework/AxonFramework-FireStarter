@@ -27,7 +27,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 import java.util.stream.Stream
 
-class FireStarterQueryBus(private val delegate: QueryBus) : QueryBus {
+class FireStarterQueryBus(
+    private val delegate: QueryBus,
+    private val settingsHolder: FireStarterSettingsHolder,
+) : QueryBus {
     override fun registerHandlerInterceptor(handlerInterceptor: MessageHandlerInterceptor<in QueryMessage<*, *>>): Registration? {
         return delegate.registerHandlerInterceptor(handlerInterceptor)
     }
@@ -45,7 +48,7 @@ class FireStarterQueryBus(private val delegate: QueryBus) : QueryBus {
     }
 
     override fun <Q : Any?, R : Any?> query(query: QueryMessage<Q, R>): CompletableFuture<QueryResponseMessage<R>> {
-        return CompletableFuture.runAsync { FireStarterSettingsHolder.getSettings().query?.dispatch?.applyTaints() }
+        return CompletableFuture.runAsync { settingsHolder.getSettings().query?.dispatch?.applyTaints() }
             .thenCompose { delegate.query(query) }
     }
 
@@ -54,7 +57,7 @@ class FireStarterQueryBus(private val delegate: QueryBus) : QueryBus {
         timeout: Long,
         unit: TimeUnit
     ): Stream<QueryResponseMessage<R>>? {
-        FireStarterSettingsHolder.getSettings().query?.dispatch?.applyTaints()
+        settingsHolder.getSettings().query?.dispatch?.applyTaints()
         return delegate.scatterGather(query, timeout, unit)
     }
 

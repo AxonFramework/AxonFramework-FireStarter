@@ -9,7 +9,10 @@ import org.axonframework.messaging.MessageDispatchInterceptor
 import org.axonframework.messaging.MessageHandler
 import org.axonframework.messaging.MessageHandlerInterceptor
 
-class FireStarterCommandBus(private val delegate: CommandBus) : CommandBus {
+class FireStarterCommandBus(
+    private val delegate: CommandBus,
+    private val settingsHolder: FireStarterSettingsHolder,
+) : CommandBus {
     override fun registerHandlerInterceptor(handlerInterceptor: MessageHandlerInterceptor<in CommandMessage<*>>): Registration? {
         return delegate.registerHandlerInterceptor(handlerInterceptor)
     }
@@ -23,7 +26,7 @@ class FireStarterCommandBus(private val delegate: CommandBus) : CommandBus {
     }
 
     override fun <C : Any?, R : Any?> dispatch(command: CommandMessage<C>, callback: CommandCallback<in C, in R>) {
-        FireStarterSettingsHolder.getSettings().command?.dispatch?.applyTaints()
+        settingsHolder.getSettings().command?.dispatch?.applyTaints()
         return delegate.dispatch(command, callback)
     }
 

@@ -25,11 +25,14 @@ import org.axonframework.eventhandling.tokenstore.UnableToRetrieveIdentifierExce
 import org.axonframework.firestarter.FireStarterSettingsHolder
 import java.util.*
 
-class FireStarterTokenStore(private val delegate: TokenStore) : TokenStore {
+class FireStarterTokenStore(
+    private val delegate: TokenStore,
+    private val settingsHolder: FireStarterSettingsHolder,
+) : TokenStore {
 
     @Throws(UnableToClaimTokenException::class)
     override fun initializeTokenSegments(processorName: String, segmentCount: Int) {
-        FireStarterSettingsHolder.getSettings().tokens?.store?.applyTaints()
+        settingsHolder.getSettings().tokens?.store?.applyTaints()
         delegate.initializeTokenSegments(processorName, segmentCount)
     }
 
@@ -39,17 +42,17 @@ class FireStarterTokenStore(private val delegate: TokenStore) : TokenStore {
         segmentCount: Int,
         initialToken: TrackingToken?
     ) {
-        FireStarterSettingsHolder.getSettings().tokens?.store?.applyTaints()
+        settingsHolder.getSettings().tokens?.store?.applyTaints()
         delegate.initializeTokenSegments(processorName, segmentCount, initialToken)
     }
 
     override fun storeToken(token: TrackingToken?, processorName: String, segment: Int) {
-        FireStarterSettingsHolder.getSettings().tokens?.store?.applyTaints()
+        settingsHolder.getSettings().tokens?.store?.applyTaints()
         delegate.storeToken(token, processorName, segment)
     }
 
     override fun fetchToken(processorName: String, segement: Int): TrackingToken? {
-        FireStarterSettingsHolder.getSettings().tokens?.fetch?.applyTaints()
+        settingsHolder.getSettings().tokens?.fetch?.applyTaints()
         return delegate.fetchToken(processorName, segement)
     }
 
@@ -57,24 +60,24 @@ class FireStarterTokenStore(private val delegate: TokenStore) : TokenStore {
     override fun fetchToken(
         processorName: String, segment: Segment
     ): TrackingToken? {
-        FireStarterSettingsHolder.getSettings().tokens?.fetch?.applyTaints()
+        settingsHolder.getSettings().tokens?.fetch?.applyTaints()
         return delegate.fetchToken(processorName, segment.segmentId)
     }
 
     @Throws(UnableToClaimTokenException::class)
     override fun extendClaim(processorName: String, segment: Int) {
-        FireStarterSettingsHolder.getSettings().tokens?.store?.applyTaints()
+        settingsHolder.getSettings().tokens?.store?.applyTaints()
         delegate.extendClaim(processorName, segment)
     }
 
     override fun releaseClaim(processorName: String, segment: Int) {
-        FireStarterSettingsHolder.getSettings().tokens?.store?.applyTaints()
+        settingsHolder.getSettings().tokens?.store?.applyTaints()
         delegate.releaseClaim(processorName, segment)
     }
 
     @Throws(UnableToInitializeTokenException::class)
     override fun initializeSegment(token: TrackingToken?, processorName: String, segment: Int) {
-        FireStarterSettingsHolder.getSettings().tokens?.store?.applyTaints()
+        settingsHolder.getSettings().tokens?.store?.applyTaints()
         delegate.initializeSegment(token, processorName, segment)
     }
 
@@ -88,12 +91,12 @@ class FireStarterTokenStore(private val delegate: TokenStore) : TokenStore {
     }
 
     override fun fetchSegments(processorName: String): IntArray? {
-        FireStarterSettingsHolder.getSettings().tokens?.fetch?.applyTaints()
+        settingsHolder.getSettings().tokens?.fetch?.applyTaints()
         return delegate.fetchSegments(processorName)
     }
 
     override fun fetchAvailableSegments(processorName: String): List<Segment?>? {
-        FireStarterSettingsHolder.getSettings().tokens?.fetch?.applyTaints()
+        settingsHolder.getSettings().tokens?.fetch?.applyTaints()
         return delegate.fetchAvailableSegments(processorName)
     }
 
