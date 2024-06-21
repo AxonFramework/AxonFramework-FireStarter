@@ -5,14 +5,17 @@ import org.axonframework.modelling.saga.AssociationValue
 import org.axonframework.modelling.saga.AssociationValues
 import org.axonframework.modelling.saga.repository.SagaStore
 
-class FireStarterSagaStore<T>(private val delegate: SagaStore<T>) : SagaStore<T> {
+class FireStarterSagaStore<T>(
+    private val delegate: SagaStore<T>,
+    private val settingsHolder: FireStarterSettingsHolder,
+) : SagaStore<T> {
     override fun findSagas(sagaType: Class<out T>?, associationValue: AssociationValue?): MutableSet<String>? {
-        FireStarterSettingsHolder.getSettings().sagas?.retrieve?.applyTaints()
+        settingsHolder.getSettings().sagas?.retrieve?.applyTaints()
         return delegate.findSagas(sagaType, associationValue)
     }
 
     override fun <S : T> loadSaga(sagaType: Class<S>?, sagaIdentifier: String?): SagaStore.Entry<S>? {
-        FireStarterSettingsHolder.getSettings().sagas?.retrieve?.applyTaints()
+        settingsHolder.getSettings().sagas?.retrieve?.applyTaints()
         return delegate.loadSaga(sagaType, sagaIdentifier)
     }
 
@@ -21,7 +24,7 @@ class FireStarterSagaStore<T>(private val delegate: SagaStore<T>) : SagaStore<T>
         sagaIdentifier: String?,
         associationValues: MutableSet<AssociationValue>?
     ) {
-        FireStarterSettingsHolder.getSettings().sagas?.delete?.applyTaints()
+        settingsHolder.getSettings().sagas?.delete?.applyTaints()
         delegate.deleteSaga(sagaType, sagaIdentifier, associationValues)
     }
 
@@ -31,7 +34,7 @@ class FireStarterSagaStore<T>(private val delegate: SagaStore<T>) : SagaStore<T>
         saga: T,
         associationValues: MutableSet<AssociationValue>?
     ) {
-        FireStarterSettingsHolder.getSettings().sagas?.create?.applyTaints()
+        settingsHolder.getSettings().sagas?.create?.applyTaints()
         delegate.insertSaga(sagaType, sagaIdentifier, saga, associationValues)
     }
 
@@ -41,7 +44,7 @@ class FireStarterSagaStore<T>(private val delegate: SagaStore<T>) : SagaStore<T>
         saga: T,
         associationValues: AssociationValues?
     ) {
-        FireStarterSettingsHolder.getSettings().sagas?.update?.applyTaints()
+        settingsHolder.getSettings().sagas?.update?.applyTaints()
         delegate.updateSaga(sagaType, sagaIdentifier, saga, associationValues)
     }
 

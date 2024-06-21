@@ -31,7 +31,10 @@ import java.time.Duration
 import java.time.Instant
 import java.util.function.Consumer
 
-class FireStarterEventStore(private val delegate: EventStore) : EventStore {
+class FireStarterEventStore(
+    private val delegate: EventStore,
+    private val settingsHolder: FireStarterSettingsHolder,
+) : EventStore {
 
     override fun subscribe(messageProcessor: Consumer<MutableList<out EventMessage<*>>>): Registration? {
         return delegate.subscribe(messageProcessor)
@@ -42,11 +45,11 @@ class FireStarterEventStore(private val delegate: EventStore) : EventStore {
     }
 
     override fun publish(events: MutableList<out EventMessage<*>>) {
-        FireStarterSettingsHolder.getSettings().events?.publishEvent?.applyTaints()
+        settingsHolder.getSettings().events?.publishEvent?.applyTaints()
         CurrentUnitOfWork.map { uow ->
             uow.resources().computeIfAbsent("__firestarter_commit_taint") {
                 uow.onCommit {
-                    FireStarterSettingsHolder.getSettings().events?.commitEvents?.applyTaints()
+                    settingsHolder.getSettings().events?.commitEvents?.applyTaints()
                 }
             }
         }
@@ -54,17 +57,17 @@ class FireStarterEventStore(private val delegate: EventStore) : EventStore {
     }
 
     override fun openStream(trackingToken: TrackingToken?): BlockingStream<TrackedEventMessage<*>>? {
-        FireStarterSettingsHolder.getSettings().events?.openStream?.applyTaints()
+        settingsHolder.getSettings().events?.openStream?.applyTaints()
         return delegate.openStream(trackingToken)
     }
 
     override fun readEvents(aggregateIdentifier: String): DomainEventStream? {
-        FireStarterSettingsHolder.getSettings().events?.readAggregateStream?.applyTaints()
+        settingsHolder.getSettings().events?.readAggregateStream?.applyTaints()
         return delegate.readEvents(aggregateIdentifier)
     }
 
     override fun storeSnapshot(snapshot: DomainEventMessage<*>) {
-        FireStarterSettingsHolder.getSettings().events?.storeSnapshot?.applyTaints()
+        settingsHolder.getSettings().events?.storeSnapshot?.applyTaints()
         delegate.storeSnapshot(snapshot)
     }
 

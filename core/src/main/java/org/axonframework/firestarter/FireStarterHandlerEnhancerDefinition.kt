@@ -9,12 +9,14 @@ import org.axonframework.messaging.annotation.MessageHandlingMember
 import org.axonframework.messaging.annotation.WrappedMessageHandlingMember
 import org.axonframework.queryhandling.QueryMessage
 
-class FireStarterHandlerEnhancerDefinition : HandlerEnhancerDefinition {
+class FireStarterHandlerEnhancerDefinition(
+    private val settingsHolder: FireStarterSettingsHolder,
+) : HandlerEnhancerDefinition {
     override fun <T : Any?> wrapHandler(p0: MessageHandlingMember<T>): MessageHandlingMember<T> {
         if (p0.canHandleMessageType(QueryMessage::class.java)) {
             return object : WrappedMessageHandlingMember<T>(p0) {
                 override fun handle(message: Message<*>, target: T?): Any? {
-                    FireStarterSettingsHolder.getSettings().query?.handlers?.applyTaints()
+                    settingsHolder.getSettings().query?.handlers?.applyTaints()
                     return super.handle(message, target)
                 }
             }
@@ -26,7 +28,7 @@ class FireStarterHandlerEnhancerDefinition : HandlerEnhancerDefinition {
             }
             return object : WrappedMessageHandlingMember<T>(p0) {
                 override fun handle(message: Message<*>, target: T?): Any? {
-                    FireStarterSettingsHolder.getSettings().events?.handlers?.applyTaints()
+                    settingsHolder.getSettings().events?.handlers?.applyTaints()
                     return super.handle(message, target)
                 }
             }
@@ -34,7 +36,7 @@ class FireStarterHandlerEnhancerDefinition : HandlerEnhancerDefinition {
         if (p0.canHandleMessageType(CommandMessage::class.java) || p0.canHandleMessageType(DeadlineMessage::class.java)) {
             return object : WrappedMessageHandlingMember<T>(p0) {
                 override fun handle(message: Message<*>, target: T?): Any? {
-                    FireStarterSettingsHolder.getSettings().command?.handlers?.applyTaints()
+                    settingsHolder.getSettings().command?.handlers?.applyTaints()
                     return super.handle(message, target)
                 }
             }

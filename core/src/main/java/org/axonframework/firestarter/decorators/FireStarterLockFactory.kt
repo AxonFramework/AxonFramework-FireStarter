@@ -20,9 +20,12 @@ import org.axonframework.common.lock.Lock
 import org.axonframework.common.lock.LockFactory
 import org.axonframework.firestarter.FireStarterSettingsHolder
 
-class FireStarterLockFactory(private val lockFactory: LockFactory): LockFactory {
+class FireStarterLockFactory(
+    private val lockFactory: LockFactory,
+    private val settingsHolder: FireStarterSettingsHolder,
+) : LockFactory {
     override fun obtainLock(identifier: String?): Lock? {
-        FireStarterSettingsHolder.getSettings().command?.lockTime?.applyTaints()
+        settingsHolder.getSettings().command?.lockTime?.applyTaints()
         return lockFactory.obtainLock(identifier)
     }
 }

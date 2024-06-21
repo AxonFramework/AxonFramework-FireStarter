@@ -22,11 +22,12 @@ import org.axonframework.eventsourcing.eventstore.EventStore
 import org.axonframework.firestarter.decorators.*
 import org.axonframework.modelling.saga.repository.SagaStore
 import org.axonframework.queryhandling.QueryBus
-import org.axonframework.tracing.SpanFactory
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.BeanPostProcessor
 
-class FireStarterBeanPostProcessor: BeanPostProcessor {
+class FireStarterBeanPostProcessor(
+    private val settingsHolder: FireStarterSettingsHolder,
+) : BeanPostProcessor {
     private val logger = LoggerFactory.getLogger(
         this::class.java
     )
@@ -34,23 +35,23 @@ class FireStarterBeanPostProcessor: BeanPostProcessor {
     override fun postProcessBeforeInitialization(bean: Any, beanName: String): Any? {
         if (bean is EventStore) {
             logger.info("Decorating EventStore with Axon Framework Firestarter")
-            return FireStarterEventStore(bean)
+            return FireStarterEventStore(bean, settingsHolder)
         }
         if (bean is QueryBus) {
             logger.info("Decorating QueryBus with Axon Framework Firestarter")
-            return FireStarterQueryBus(bean)
+            return FireStarterQueryBus(bean, settingsHolder)
         }
         if (bean is CommandBus) {
             logger.info("Decorating CommandBus with Axon Framework Firestarter")
-            return FireStarterCommandBus(bean)
+            return FireStarterCommandBus(bean, settingsHolder)
         }
         if (bean is SagaStore<*>) {
             logger.info("Decorating SagaRepository with Axon Framework Firestarter")
-            return FireStarterSagaStore(bean)
+            return FireStarterSagaStore(bean, settingsHolder)
         }
         if (bean is TokenStore) {
             logger.info("Decorating TokenStore with Axon Framework Firestarter")
-            return FireStarterTokenStore(bean)
+            return FireStarterTokenStore(bean, settingsHolder)
         }
         return super.postProcessBeforeInitialization(bean, beanName)
     }
