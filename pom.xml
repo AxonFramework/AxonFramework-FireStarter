@@ -23,7 +23,7 @@
     <groupId>org.axonframework.firestarter</groupId>
     <artifactId>firestarter-parent</artifactId>
     <name>Axon Framework Fire Starter</name>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
     <packaging>pom</packaging>
     <description>Axon Framework components that fires up your applications. Literally.</description>
 
