@@ -23,11 +23,11 @@
     <parent>
         <groupId>org.axonframework.firestarter</groupId>
         <artifactId>firestarter-parent</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>firestarter-core</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3-SNAPSHOT</version>
     <name>Axon Framework Fire Starter Core</name>
     <description>Core components for AxonFramework FireStarter</description>
 
