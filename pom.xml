@@ -31,13 +31,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.1</version>
+        <version>3.4.2</version>
     </parent>
 
     <properties>
         <java.version>11</java.version>
         <axon.version>4.10.4</axon.version>
-        <kotlin.version>2.1.0</kotlin.version>
+        <kotlin.version>2.1.10</kotlin.version>
         <dokka.version>2.0.0</dokka.version>
     </properties>
 
