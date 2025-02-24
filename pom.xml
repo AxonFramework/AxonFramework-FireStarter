@@ -31,12 +31,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.2</version>
+        <version>3.4.3</version>
     </parent>
 
     <properties>
         <java.version>11</java.version>
-        <axon.version>4.11.0</axon.version>
+        <axon.version>4.11.1</axon.version>
         <kotlin.version>2.1.10</kotlin.version>
         <dokka.version>2.0.0</dokka.version>
     </properties>
@@ -137,7 +137,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
+                <version>3.14.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
