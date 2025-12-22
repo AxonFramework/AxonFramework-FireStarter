@@ -27,14 +27,12 @@
     </parent>
 
     <artifactId>firestarter-core</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
     <name>Axon Framework Fire Starter Core</name>
     <description>Core components for AxonFramework FireStarter</description>
 
 
     <properties>
         <java.version>11</java.version>
-        <axon.version>4.7.2</axon.version>
     </properties>
 
     <dependencies>
