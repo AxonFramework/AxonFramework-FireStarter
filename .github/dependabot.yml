@@ -32,3 +32,6 @@ updates:
           - "patch"
           - "minor"
           - "major"
+    ignore:
+      - dependency-name: "org.springframework.boot:spring-boot-starter-parent"
+        versions: [ "[7.0.0,)" ]
