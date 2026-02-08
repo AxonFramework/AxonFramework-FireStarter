@@ -36,8 +36,8 @@
 
     <properties>
         <java.version>11</java.version>
-        <axon.version>4.12.3</axon.version>
-        <kotlin.version>2.3.0</kotlin.version>
+        <axon.version>4.13.0</axon.version>
+        <kotlin.version>2.3.10</kotlin.version>
         <dokka.version>2.1.0</dokka.version>
     </properties>
 
@@ -137,7 +137,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.1</version>
+                <version>3.15.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
