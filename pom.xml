@@ -37,7 +37,7 @@
     <properties>
         <java.version>11</java.version>
         <axon.version>4.13.0</axon.version>
-        <kotlin.version>2.3.10</kotlin.version>
+        <kotlin.version>2.3.20</kotlin.version>
         <dokka.version>2.1.0</dokka.version>
     </properties>
 
