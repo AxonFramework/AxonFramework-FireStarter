@@ -1,3 +1,9 @@
+> Repository Archive Notice
+>
+> Due to low usage, Axoniq has decided to no longer maintain the AxonFramework-FireStarter project.
+> If you have been relying heavily upon AxonFramework-FireStarter to test your applications, be sure to notify us through our [forum](https://discuss.axoniq.io/) or [contact page](https://www.axoniq.io/contact).
+> We will happily reconsider based on concrete examples and data of people utilizing this tool
+
 # AxonFramework-FireStarter
 
 AxonFramework module for starting fires in your applications.
