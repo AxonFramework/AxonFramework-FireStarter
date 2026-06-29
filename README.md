@@ -1,10 +1,10 @@
-> Repository Archive Notice
->
-> Due to low usage, Axoniq has decided to no longer maintain the AxonFramework-FireStarter project.
-> If you have been relying heavily upon AxonFramework-FireStarter to test your applications, be sure to notify us through our [forum](https://discuss.axoniq.io/) or [contact page](https://www.axoniq.io/contact).
-> We will happily reconsider based on concrete examples and data of people utilizing this tool
+# Repository Archive Notice
 
-# AxonFramework-FireStarter
+Due to low usage, Axoniq has decided to no longer maintain the AxonFramework-FireStarter project.
+If you have been relying heavily upon AxonFramework-FireStarter to test your applications, be sure to notify us through our [forum](https://discuss.axoniq.io/) or [contact page](https://www.axoniq.io/contact).
+We will happily reconsider based on concrete examples and data of people utilizing this tool
+
+## AxonFramework-FireStarter
 
 AxonFramework module for starting fires in your applications.
 
@@ -19,7 +19,7 @@ Simply add the starter and you can visit `/fire-starter/` on your application an
 </dependency>
 ```
 
-## Taint types
+### Taint types
 
 You can apply three different types of taints:
 
@@ -27,8 +27,8 @@ You can apply three different types of taints:
 - *Random Delay*: This action will always include a delay that's between the lower and upper bounds given
 - *Error Rate*: Introduces Checked or Runtime exceptions at a predefined rate
 
-## Preview
+### Preview
 ![img.png](img.png)
 
-## Persistence
+### Persistence
 Taints are persisted in memory and do not persist past a reboot of your application. 
